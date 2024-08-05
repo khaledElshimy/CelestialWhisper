@@ -22,6 +22,7 @@ namespace CM.MVC.Views
         public void InitializeView(string name)
         {
             gameObject = new GameObject(name);
+            gameObject.AddComponent<RectTransform>();  
         }
          
         public void AddCardView(CardView cardView)
