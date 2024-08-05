@@ -11,7 +11,7 @@ namespace CM.Factories
 {
     public class GameFactory: IFactory<GameModel, GameView, GameController<GameModel, GameView>>
     {
-        public IController<GameModel, GameView> Create(Transform container = null)
+        public IController<GameModel, GameView> Create()
 {
     GameController<GameModel, GameView> gameController = new GameController<GameModel, GameView>();
     
@@ -22,13 +22,6 @@ namespace CM.Factories
     }
 
     gameController.Setup();
-    
-    if (container != null)
-    {
-        gameController.View.gameObject.transform.SetParent(container);
-        gameController.View.gameObject.transform.localPosition = Vector3.zero;
-        gameController.View.gameObject.transform.localRotation = Quaternion.identity;
-    }
     
     return gameController;
 }

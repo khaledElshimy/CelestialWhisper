@@ -22,12 +22,15 @@ namespace CM.MVC.Controllers
             gameModel = new GameModel();
             gameModel.InitializeData();
             gameView = new GameView();
-            gameView.InitializeView("GameView");
+            Transform parentTransform = Object.FindObjectOfType<Canvas>().transform;
+            gameView.InitializeView("GameView", parentTransform);
+            gameView.CreateGridLayout(4);
             CardFactory cardFactory = new CardFactory();
             foreach(var card in gameModel.cards) 
             {         
                 Debug.Log($"Card {card.Name}");     
-                CardController<CardModel,CardView> cardController= cardFactory.Create(gameView.gameObject.transform) as CardController<CardModel,CardView>;
+                CardController<CardModel,CardView> cardController= cardFactory.Create() as CardController<CardModel,CardView>;
+                gameView.AddCardView(cardController.View, cardController.Model);
                 cardController.updateCard(card);
             }
         }

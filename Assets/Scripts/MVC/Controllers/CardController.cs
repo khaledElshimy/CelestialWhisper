@@ -7,25 +7,26 @@ namespace CM.Controllers
     public class CardController<M, V> : IController<M, V> 
     where M : CardModel where V : CardView, new()
     {
+        
         CardModel cardModel;
         CardView cardView;
         public IModel Model {get{return cardModel;} private set{Model = cardModel;} }
         public IView View {get{return cardView;} private set{View = cardView;} }
-
+        
 
         public void Setup()
         {
             cardModel = new CardModel();
             cardModel.InitializeData();
             cardView = new CardView();
-            cardView.InitializeView("");
+            //cardView.InitializeView("");
         }
 
         public void updateCard(CardModel cardModel)
         {
             this.cardModel = cardModel;
             cardView.gameObject.name = cardModel.Name;
-            cardView.UpdateCardView(cardModel.backSprite, false);
+            cardView.UpdateCardView(cardModel.frontSprite, false);
         }
 
 

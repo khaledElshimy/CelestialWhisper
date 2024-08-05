@@ -5,6 +5,6 @@ namespace CM.MVC.Interfaces
     public interface IView
     {
         GameObject gameObject{ get; }
-        void InitializeView(string name);
+        void InitializeView(string name, Transform parentTransform);
     }
 }

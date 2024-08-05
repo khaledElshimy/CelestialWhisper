@@ -9,7 +9,7 @@ namespace CM.Factories
 {
    public class CardFactory : IFactory<CardModel, CardView, CardController<CardModel, CardView>>
     {
-        public IController<CardModel, CardView> Create(Transform container = null)
+        public IController<CardModel, CardView> Create()
         {
              // Create a new instance of the controller
         CardController<CardModel, CardView> cardController = new CardController<CardModel, CardView>();
@@ -17,17 +17,10 @@ namespace CM.Factories
         CardModel model = cardController.Model as CardModel;
         
         CardView view = cardController.View as CardView;
-        view.InitializeView("");
-
-        // Optionally set up the view with a container if provided
-        if (container != null)
-        {
-            view.gameObject.transform.SetParent(container, false);
-        }
 
         return cardController;
         }
-        
+
     }
 
 }
