@@ -3,8 +3,7 @@ using UnityEngine;
 
 namespace CM.Misc
 {
-    [CreateAssetMenu(fileName = "Settings", menuName = "Card Matching Game/Settings")]
-    public class GameSettings :ScriptableObject
+    public class GameSettings 
     {
        [SerializeField]
        private int Width;
@@ -15,6 +14,7 @@ namespace CM.Misc
         {
             Width = width;
             Height = height;
+            GameDataManager.Instance.SaveGameSettings(this);
         }
 
         public (int width, int height) GetGameSize()
