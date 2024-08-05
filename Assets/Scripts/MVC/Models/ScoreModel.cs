@@ -6,13 +6,16 @@ using UnityEngine;
 namespace CM.MVC.Models
 {
     [Serializable]
-    public class ScoreModel : ScriptableObject, IModel
+    public class ScoreModel 
     {
-        public int Score {get;set;}
+        public int Match;
+        public int Turns;
 
         public void InitializeData()
         {
-             Score = GameDataManager.Instance.LoadScore() ;
+           var Score = GameDataManager.Instance.LoadScore() ;
+           Match = Score.match;
+           Turns = Score.turns;
         }
     }
 }

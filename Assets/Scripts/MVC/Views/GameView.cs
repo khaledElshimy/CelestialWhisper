@@ -26,8 +26,8 @@ namespace CM.MVC.Views
             
             RectTransform rectTransform = gameObject.AddComponent<RectTransform>();
 
-            Image image = gameObject.AddComponent<Image>();
-            image.color = new Color(0.2f, 0.2f, 0.2f, 1.0f); // Light grey color
+           // Image image = gameObject.AddComponent<Image>();
+           // image.color = new Color(0.2f, 0.2f, 0.2f, 1.0f); // Light grey color
 
             rectTransform.SetParent(parentTransform);
             rectTransform.anchorMin = new Vector2(0.0f, 0.0f); // Center of the screen
@@ -56,8 +56,9 @@ namespace CM.MVC.Views
         {
 
             int gameSize = GameManager.Instance.Settings.GetGameSize();
-            int rows = Mathf.CeilToInt(Mathf.Sqrt(gameSize)); // Number of rows
-            int cols = Mathf.CeilToInt((float)gameSize / rows); // Number of columns
+            int cols = Mathf.FloorToInt(Mathf.Sqrt(gameSize)); // Number of columns
+            cols = cols % 2 != 0 ? cols + 1 : cols;
+            int rows = Mathf.CeilToInt((float)gameSize / cols); // Number of rows
             
             float cellWidth = gameViewWidth / cols;
             float cellHeight = gameViewHeight / rows;

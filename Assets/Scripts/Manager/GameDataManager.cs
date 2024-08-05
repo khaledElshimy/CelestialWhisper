@@ -67,7 +67,7 @@ namespace CM.Misc
             
             return new GameSettings();
         }
-        public int LoadScore()
+        public (int match, int turns) LoadScore()
         {
             string path = Path.Combine(Application.persistentDataPath, Configurations.SCORE_FILE_NAME);
             if (File.Exists(path))
@@ -75,14 +75,14 @@ namespace CM.Misc
                 string json = File.ReadAllText(path);
                 ScoreModel scoreModel = JsonUtility.FromJson<ScoreModel>(json);
                 Debug.Log($"Score loaded from {path}");
-                return scoreModel.Score;
+                return (scoreModel.Match, scoreModel.Turns);
             }
             else
             {
                 Debug.Log($"File not found at {path}, a default score value 0 has returned");
             }
 
-            return 0;
+            return (0,0);
         }
         public List<CardModel> LoadCards()
         {
@@ -118,6 +118,7 @@ namespace CM.Misc
     
             List<CardModel> selectedCards = allCards.GetRange(0, Math.Min(Mathf.CeilToInt(gameSize/2), allCards.Count));
             List<CardModel> gameCards = selectedCards.SelectMany(item => new List<CardModel> { item, item }).ToList();
+
             return gameCards;
         }
 
