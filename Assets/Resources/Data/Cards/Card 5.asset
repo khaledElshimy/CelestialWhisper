@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8776297828a346ac9a80fab3a018599, type: 3}
   m_Name: Card 5
   m_EditorClassIdentifier: 
-  Id: 1
-  frontSprite: {fileID: 0}
-  backSprite: {fileID: 0}
+  Id: 5
+  Name: Ina
+  frontSprite: {fileID: 21300000, guid: 79e75c80789824f99a1dfe1c4b6acbb6, type: 3}
+  backSprite: {fileID: 21300000, guid: b7ba11948c4b242239d59ab8d59c9e9f, type: 3}
   cardState: 0

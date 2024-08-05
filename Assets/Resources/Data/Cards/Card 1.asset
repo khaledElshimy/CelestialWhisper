@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Card 1
   m_EditorClassIdentifier: 
   Id: 1
-  frontSprite: {fileID: 0}
-  backSprite: {fileID: 0}
+  Name: Deu
+  frontSprite: {fileID: 21300000, guid: bd74de257681043279e4b5473944dc3e, type: 3}
+  backSprite: {fileID: 21300000, guid: b7ba11948c4b242239d59ab8d59c9e9f, type: 3}
   cardState: 0
