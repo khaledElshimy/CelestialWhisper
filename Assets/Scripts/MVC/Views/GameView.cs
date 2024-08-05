@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using CM.Factories;
 using CM.MVC.Interfaces;
+using CM.MVC.Models;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,16 +16,22 @@ namespace CM.MVC.Views
         [SerializeField]
         private Text score;
 
-        public GameObject gameObject => throw new System.NotImplementedException();
+        public GameObject gameObject {get; private set;}
 
-        public void Initialize()
+
+        public void InitializeView(string name)
         {
-
+            gameObject = new GameObject(name);
         }
          
         public void AddCardView(CardView cardView)
         {
             cardViews.Add(cardView);
+        }
+
+        public void PopualeCards(List<CardView> cardViews)
+        {
+            
         }
         
         

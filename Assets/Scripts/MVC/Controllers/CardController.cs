@@ -4,7 +4,7 @@ using CM.MVC.Models;
 using CM.MVC.Views;
 namespace CM.Controllers
 {
-    public class CardController<M, V> : IController<IModel, IView> 
+    public class CardController<M, V> : IController<M, V> 
     where M : CardModel where V : CardView, new()
     {
         CardModel cardModel;
@@ -17,6 +17,12 @@ namespace CM.Controllers
         {
            CardModel cardModel = Model as CardModel;
            CardView cardView = View as CardView;
+        }
+
+        public void updateCard(CardModel cardModel)
+        {
+            this.cardModel = cardModel;
+            cardView.UpdateCardView(cardModel.backSprite, false);
         }
 
 

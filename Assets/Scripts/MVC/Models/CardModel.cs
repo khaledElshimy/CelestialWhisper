@@ -12,5 +12,9 @@ namespace CM.MVC.Models
         public Sprite backSprite;
         public CardState cardState;
 
+        public void InitializeData()
+        {
+            Id = 0;
+        }
     }
 }

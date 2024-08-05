@@ -5,6 +5,11 @@ namespace CM.MVC.Models
 {
     public class ScoreModel : ScriptableObject, IModel
     {
-        public int score; 
+        public int Score {get;set;}
+
+        public void InitializeData()
+        {
+             
+        }
     }
 }
