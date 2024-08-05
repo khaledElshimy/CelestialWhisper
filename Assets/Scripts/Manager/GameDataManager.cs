@@ -62,10 +62,10 @@ namespace CM.Misc
             }
             else
             {
-                Debug.LogError($"File not found at {path}");
+                Debug.Log($"File not found at {path}, a default settings have returned");
             }
             
-            return null;
+            return new GameSettings();
         }
         public int LoadScore()
         {
@@ -79,7 +79,7 @@ namespace CM.Misc
             }
             else
             {
-                Debug.LogError($"File not found at {path}");
+                Debug.Log($"File not found at {path}, a default score value 0 has returned");
             }
 
             return 0;
@@ -92,16 +92,11 @@ namespace CM.Misc
             {
                 string json = File.ReadAllText(path);
                 CardDataListWrapper datawrapper = JsonUtility.FromJson<CardDataListWrapper>(json);
-                if (datawrapper == null)
-                {
-                    cards = GetCardsList();
-                }
-                Debug.Log($"CardData list loaded from {path}");
-                cards = datawrapper.cardDataList;
+                cards = datawrapper != null ? datawrapper.cardDataList : GetCardsList();      
             }
             else
             {
-                Debug.LogError($"File not found at {path}");
+                Debug.Log($"File not found at {path}, a default list has returned");
                 cards = GetCardsList();
             }
             return cards;
@@ -111,12 +106,11 @@ namespace CM.Misc
         private  List<CardModel> GetCardsList()
         {
             // Load all CardModel Scriptable Objects in the "Cards" folder
-            List<CardModel> allCards = Resources.LoadAll<CardModel>("Cards").ToList();
+            List<CardModel> allCards = Resources.LoadAll<CardModel>(Configurations.CARDS_RESOURCES_PATH).ToList();
 
             if (allCards == null || allCards.Count == 0)
             {
                 Debug.LogError("No cards found in the Resources/Cards folder!");
-                return null;
             }
 
             allCards.Shuffle();

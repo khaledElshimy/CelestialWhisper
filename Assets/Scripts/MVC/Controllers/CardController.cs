@@ -15,39 +15,44 @@ namespace CM.Controllers
 
         public void Setup()
         {
-           CardModel cardModel = Model as CardModel;
-           CardView cardView = View as CardView;
+            cardModel = new CardModel();
+            cardModel.InitializeData();
+            cardView = new CardView();
+            cardView.InitializeView("");
         }
 
         public void updateCard(CardModel cardModel)
         {
             this.cardModel = cardModel;
+            cardView.gameObject.name = cardModel.Name;
             cardView.UpdateCardView(cardModel.backSprite, false);
         }
 
 
         public void ChangeCardState(CardState cardState)
-          {
-        
-              if (cardState == cardModel.cardState || cardModel.cardState == CardState.Matched) return;
-              switch (cardModel.cardState)
-              {
-                  case CardState.Back:
+        {
+
+            if (cardState != cardModel.cardState && cardModel.cardState != CardState.Matched)
+            {
+                switch (cardModel.cardState)
+                {
+                    case CardState.Back:
                         cardModel.cardState = cardState;
                         cardView.UpdateCardView(cardModel.backSprite, true);
-                  break;
-                  case CardState.Front: 
-                        cardModel.cardState= cardState;
+                        break;
+                    case CardState.Front:
+                        cardModel.cardState = cardState;
                         cardView.UpdateCardView(cardModel.frontSprite, true);
-                  break;
-                  case CardState.Matched: 
-                  cardModel.cardState = cardState;
-                  break;
-                  case CardState.None:
-                  default:
-                  break;
-              }
-          }
+                        break;
+                    case CardState.Matched:
+                        cardModel.cardState = cardState;
+                        break;
+                    case CardState.None:
+                    default:
+                        break;
+                }
+            } 
+        }
 
     }
 }

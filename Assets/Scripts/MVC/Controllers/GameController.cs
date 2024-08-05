@@ -14,18 +14,19 @@ namespace CM.MVC.Controllers
     {
         GameModel gameModel;
         GameView gameView;
-        public IModel Model {get{return gameModel;} private set{Model = gameModel;} }
-        public IView View {get{return gameView;} private set{View = gameView;} }
+        public IModel Model {get{return gameModel;} private set{} }
+        public IView View {get{return gameView;} private set{} }
 
         public void Setup()
         {
-            GameModel gameModel = Model as GameModel;
+            gameModel = new GameModel();
             gameModel.InitializeData();
-            GameView gameView = View as GameView;
+            gameView = new GameView();
             gameView.InitializeView("GameView");
             CardFactory cardFactory = new CardFactory();
             foreach(var card in gameModel.cards) 
-            {              
+            {         
+                Debug.Log($"Card {card.Name}");     
                 CardController<CardModel,CardView> cardController= cardFactory.Create(gameView.gameObject.transform) as CardController<CardModel,CardView>;
                 cardController.updateCard(card);
             }
