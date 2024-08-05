@@ -52,12 +52,20 @@ namespace CM.MVC.Views
            
         }
 
-        public void CreateGridLayout(int gameSize)
+        public void CreateGridLayout()
         {
-             int rows = Mathf.CeilToInt(Mathf.Sqrt(gameSize)); // Number of rows
+
+            int gameSize = GameManager.Instance.Settings.GetGameSize();
+            int rows = Mathf.CeilToInt(Mathf.Sqrt(gameSize)); // Number of rows
             int cols = Mathf.CeilToInt((float)gameSize / rows); // Number of columns
+            
             float cellWidth = gameViewWidth / cols;
             float cellHeight = gameViewHeight / rows;
+            float cellSize = Mathf.Min(cellWidth, cellHeight); // Ensure cellWidth == cellHeight
+
+            // Adjust rows and cols to fit the square cells
+            cellWidth = cellSize;
+            cellHeight = cellSize;
 
             GridLayoutGroup gridLayoutGroup = gameObject.AddComponent<GridLayoutGroup>();
 
@@ -65,8 +73,8 @@ namespace CM.MVC.Views
             gridLayoutGroup.cellSize = new Vector2(cellWidth, cellHeight);
 
             // Optional: Set spacing, padding, etc.
-            gridLayoutGroup.spacing = new Vector2(10, 10);
-            gridLayoutGroup.padding = new RectOffset(10, 10, 10, 10);
+            gridLayoutGroup.spacing = new Vector2(50, 50);
+            gridLayoutGroup.padding = new RectOffset(20, 20, 20, 20);
             gridLayoutGroup.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
             gridLayoutGroup.childAlignment = TextAnchor.MiddleCenter;
             gridLayoutGroup.constraintCount = cols;
@@ -77,9 +85,6 @@ namespace CM.MVC.Views
             CardModel cardModel = model as CardModel;
             view.InitializeView(cardModel.Name, this.gameObject.transform);
             cardViews.Add(view);
-        }
-
-        
-        
+        } 
     }
 }

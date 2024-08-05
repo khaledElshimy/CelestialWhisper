@@ -114,7 +114,11 @@ namespace CM.Misc
             }
 
             allCards.Shuffle();
-            return allCards;
+            int gameSize = GameManager.Instance.Settings.GetGameSize();
+    
+            List<CardModel> selectedCards = allCards.GetRange(0, Math.Min(Mathf.CeilToInt(gameSize/2), allCards.Count));
+            List<CardModel> gameCards = selectedCards.SelectMany(item => new List<CardModel> { item, item }).ToList();
+            return gameCards;
         }
 
         [Serializable]

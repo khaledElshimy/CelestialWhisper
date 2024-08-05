@@ -5,10 +5,8 @@ namespace CM.Misc
 {
     public class GameSettings 
     {
-       [SerializeField]
-       private int Width;
-       [SerializeField]
-       private int Height;
+       private int Width = 2;
+       private int Height = 2;
 
         public void UpdateGameSize(int width, int height)
         {
@@ -17,9 +15,9 @@ namespace CM.Misc
             GameDataManager.Instance.SaveGameSettings(this);
         }
 
-        public (int width, int height) GetGameSize()
+        public int GetGameSize()
         {
-            return (Width, Height);
+            return Width * Height;
         }
     }
 }

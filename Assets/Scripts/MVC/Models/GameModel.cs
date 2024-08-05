@@ -13,8 +13,6 @@ namespace CM.MVC.Models
         
         public void InitializeData()
         {   
-            GameSettings settings = GameDataManager.Instance.LoadGameSettings();
-            var gameSize = settings.GetGameSize();
             cards = GameDataManager.Instance.LoadCards();
         }
     }

@@ -24,7 +24,7 @@ namespace CM.MVC.Controllers
             gameView = new GameView();
             Transform parentTransform = Object.FindObjectOfType<Canvas>().transform;
             gameView.InitializeView("GameView", parentTransform);
-            gameView.CreateGridLayout(4);
+            gameView.CreateGridLayout();
             CardFactory cardFactory = new CardFactory();
             foreach(var card in gameModel.cards) 
             {         
