@@ -35,12 +35,13 @@ public class GameManager : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
+        Settings = GameDataManager.Instance.LoadGameSettings();
+
     }
 
     private void Start()
     {  
         EventManager =  new EventManager(); 
-        Settings = GameDataManager.Instance.LoadGameSettings();
         ChangeGameState(GameState.MainMenu);     
         EventManager.OnChangeGameState += ChangeGameState;
     }
