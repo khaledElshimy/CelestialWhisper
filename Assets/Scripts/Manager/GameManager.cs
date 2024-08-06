@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
 using CM.Enums;
 using CM.Factories;
 using CM.Misc;
@@ -9,28 +6,42 @@ using CM.MVC.Models;
 using CM.MVC.Views;
 using CM.UI;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
-using UnityEngine.UI;
 
 namespace CM.Managers
 {
+    /// <summary>
+    /// Manages the game state, settings, and interactions between different game components.
+    /// </summary>
     public class GameManager : MonoBehaviour
     {
+        /// <summary>
+        /// Singleton instance of the GameManager.
+        /// </summary>
         public static GameManager Instance;
 
-        public EventManager EventManager{ get; private set; }
+        /// <summary>
+        /// Event manager for handling game events.
+        /// </summary>
+        public EventManager EventManager { get; private set; }
 
         [SerializeField]
         private MainMenuManager mainMenuManager;
-    
+
         [SerializeField]
         private HudManager hudManager;
 
         [SerializeField]
         private ResetGameManager resetGameManager;
 
-        public GameSettings Settings {get; private set;}
-        public ScoreModel ScoreModel {get; set;}
+        /// <summary>
+        /// Game settings loaded from data.
+        /// </summary>
+        public GameSettings Settings { get; private set; }
+
+        /// <summary>
+        /// Model that holds the score information.
+        /// </summary>
+        public ScoreModel ScoreModel { get; set; }
 
         private GameController<GameModel, GameView> gameController;
         private GameState gameState = GameState.None;
@@ -49,49 +60,60 @@ namespace CM.Managers
 
         private void Start()
         {  
-            EventManager =  new EventManager(); 
+            EventManager = new EventManager(); 
             ChangeGameState(GameState.MainMenu);     
             EventManager.OnGameStateChanged += ChangeGameState;
-            EventManager.OnGameEndded += EndGame;
+            EventManager.OnGameEnded += EndGame;
         }
 
+        /// <summary>
+        /// Starts a new game by initializing the score model and creating a game controller.
+        /// </summary>
         public void StartGame()
         {
             ScoreModel = new ScoreModel();
-            GameFactory gameFactory= new GameFactory();
+            GameFactory gameFactory = new GameFactory();
             gameController = gameFactory.Create() as GameController<GameModel, GameView>;
         }
 
+        /// <summary>
+        /// Changes the game state and updates the active game components accordingly.
+        /// </summary>
+        /// <param name="state">The new game state to switch to.</param>
         private void ChangeGameState(GameState state)
         {
             gameState = state;
             switch (state)
             {
                 case GameState.MainMenu:
-                if (gameController != null)
+                    if (gameController != null)
                     {
                         ClearGame();
                     }
                     mainMenuManager.gameObject.SetActive(true);
                     hudManager.gameObject.SetActive(false);
                     resetGameManager.gameObject.SetActive(false);
-                break;
+                    break;
 
                 case GameState.GamePlay:
                     hudManager.gameObject.SetActive(true);
                     mainMenuManager.gameObject.SetActive(false);
                     resetGameManager.gameObject.SetActive(false);
                     StartGame();
-                break;
+                    break;
+
                 case GameState.Reset:
                     GameDataManager.Instance.SaveGameSettings(Settings);
                     hudManager.gameObject.SetActive(false);
                     mainMenuManager.gameObject.SetActive(false);
                     resetGameManager.gameObject.SetActive(true);
-                break;
+                    break;
             }
         }    
 
+        /// <summary>
+        /// Ends the current game, clears the game state, and switches to the reset state.
+        /// </summary>
         private void EndGame()
         {
             ClearGame();
@@ -99,6 +121,9 @@ namespace CM.Managers
             ChangeGameState(GameState.Reset);
         }
 
+        /// <summary>
+        /// Clears the current game by destroying the game controller and switching to the reset state.
+        /// </summary>
         private void ClearGame()
         {
             gameController.Destroy();
@@ -108,6 +133,7 @@ namespace CM.Managers
 
         private void OnDestroy()
         {
+            EventManager.OnGameEnded -= EndGame;
             EventManager.OnGameStateChanged -= ChangeGameState;
         }
     }

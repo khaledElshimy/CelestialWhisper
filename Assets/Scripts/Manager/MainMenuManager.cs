@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using CM.Enums;
 using CM.Managers;
 using UnityEngine;
@@ -7,29 +5,46 @@ using UnityEngine.UI;
 
 namespace CM.UI
 {
+    /// <summary>
+    /// Manages the main menu interface, including difficulty selection and game start.
+    /// </summary>
     public class MainMenuManager : MonoBehaviour
     {
+        /// <summary>
+        /// Button to start the game.
+        /// </summary>
         public Button playButton;
 
-        private GameDifficulty  gameDifficulty = GameDifficulty.None;
+        private GameDifficulty gameDifficulty = GameDifficulty.None;
 
         [SerializeField]
         private ToggleGroup difficultyToggleGroup;
-        
-        // Start is called before the first frame update
+
+        /// <summary>
+        /// Initializes the menu by setting up button listeners and updating the difficulty selection.
+        /// </summary>
         void Start()
         {
+            // Add a listener to the play button to start the game when clicked
             playButton.onClick.AddListener(StartGame);
+
+            // Load and set the current game difficulty
             gameDifficulty = GameManager.Instance.Settings.GetGameDifficulty();
             UpdateToggleGroup();
         }
 
-        // Update is called once per frame
+        /// <summary>
+        /// Changes the game state to gameplay when the play button is clicked.
+        /// </summary>
         void StartGame()
         {
             GameManager.Instance.EventManager.ChangeGameState(GameState.GamePlay);
         }
 
+        /// <summary>
+        /// Updates the game difficulty setting based on user selection.
+        /// </summary>
+        /// <param name="gameDifficulty">The difficulty level selected by the user.</param>
         public void SelectGameDifficulty(int gameDifficulty)
         {
             GameDifficulty difficulty = (GameDifficulty)gameDifficulty;
@@ -40,7 +55,9 @@ namespace CM.UI
             }
         }
 
-        // Method to update the toggle group based on the current difficulty level
+        /// <summary>
+        /// Updates the toggle group to reflect the current game difficulty level.
+        /// </summary>
         private void UpdateToggleGroup()
         {
             int difficulty = (int)gameDifficulty;

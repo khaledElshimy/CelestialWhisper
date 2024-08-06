@@ -1,10 +1,18 @@
-using UnityEngine;
-
 namespace CM.MVC.Interfaces
 {
+    /// <summary>
+    /// Interface defining the basic operations for a model in the MVC pattern.
+    /// </summary>
     public interface IModel
     {
-        int Id { get;}
+        /// <summary>
+        /// Gets the unique identifier for the model.
+        /// </summary>
+        int Id { get; }
+
+        /// <summary>
+        /// Initializes the data for the model.
+        /// </summary>
         void InitializeData();
     }
 }
