@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using CM.Controllers;
 using CM.Factories;
 using CM.MVC.Interfaces;
 using CM.MVC.Models;
@@ -81,11 +82,18 @@ namespace CM.MVC.Views
             gridLayoutGroup.constraintCount = cols;
         }
          
-        public void AddCardView(IView view, IModel model)
+        public void PopulateCards(List<CardController<CardModel, CardView> > cards)
         {
-            CardModel cardModel = model as CardModel;
-            view.InitializeView(cardModel.Name, this.gameObject.transform);
-            cardViews.Add(view);
+            foreach(var card in cards) {
+            CardModel cardModel = card.Model as CardModel;
+            
+            card.View.InitializeView(cardModel.Name, this.gameObject.transform);
+            card.updateCardView(cardModel);
+            Button button = card.View.gameObject.AddComponent<Button>();
+            button.onClick.AddListener(() => GameManager.Instance.EventManager.ClickCard(card));
+            cardViews.Add(card.View);
+            }
+          
         } 
     }
 }

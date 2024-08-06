@@ -11,14 +11,11 @@ namespace CM.Factories
     {
         public IController<CardModel, CardView> Create()
         {
-             // Create a new instance of the controller
-        CardController<CardModel, CardView> cardController = new CardController<CardModel, CardView>();
-        cardController.Setup();
-        CardModel model = cardController.Model as CardModel;
-        
-        CardView view = cardController.View as CardView;
-
-        return cardController;
+            // Create a new instance of the controller
+            CardController<CardModel, CardView> cardController = new CardController<CardModel, CardView>();
+            cardController.Setup();
+            cardController.Model.InitializeData();
+            return cardController;
         }
 
     }

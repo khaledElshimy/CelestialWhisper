@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using CM.Enums;
+using CM.MVC.Models;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,10 +15,14 @@ public class HudManager : MonoBehaviour
      
     [SerializeField]
     private Text turnsValueText;
+
+    private ScoreModel scoreModel;
      
      private void Start()
     {
         homeButton.onClick.AddListener(backToHome);
+        scoreModel = new ScoreModel();
+        scoreModel.InitializeData();
     }
 
     private void backToHome()
@@ -29,14 +34,16 @@ public class HudManager : MonoBehaviour
         GameManager.Instance.EventManager.OnMatchUpdate += UpdateMatchValue;
         GameManager.Instance.EventManager.OnTurnpdate += UpdateTurnValue;
     }
-    private void UpdateMatchValue(int match)
+    private void UpdateMatchValue()
     {
-        matchValueText.text = "" + match;
+        matchValueText.text = "" + ++scoreModel.Match;
+        scoreModel.SaveScore();
     }
 
-    private void UpdateTurnValue(int turn)
+    private void UpdateTurnValue()
     {
-        turnsValueText.text = "" + turn;
+        turnsValueText.text = "" + ++scoreModel.Turns;
+        scoreModel.SaveScore();
     }
 
     private void OnDisable()

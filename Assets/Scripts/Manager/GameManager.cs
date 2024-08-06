@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour
     {  
         EventManager =  new EventManager(); 
         ChangeGameState(GameState.MainMenu);     
-        EventManager.OnChangeGameState += ChangeGameState;
+        EventManager.OnGameStateChanged += ChangeGameState;
     }
 
     public void StartGame()
@@ -76,6 +76,6 @@ public class GameManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        EventManager.OnChangeGameState -= ChangeGameState;
+        EventManager.OnGameStateChanged -= ChangeGameState;
     }
 }

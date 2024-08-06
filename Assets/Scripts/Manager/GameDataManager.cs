@@ -106,19 +106,26 @@ namespace CM.Misc
         private  List<CardModel> GetCardsList()
         {
             // Load all CardModel Scriptable Objects in the "Cards" folder
-            List<CardModel> allCards = Resources.LoadAll<CardModel>(Configurations.CARDS_RESOURCES_PATH).ToList();
+            List<CardModelAsset> allCards = Resources.LoadAll<CardModelAsset>(Configurations.CARDS_RESOURCES_PATH).ToList();
+             List<CardModel> cards = new List<CardModel>();
 
             if (allCards == null || allCards.Count == 0)
             {
                 Debug.LogError("No cards found in the Resources/Cards folder!");
             }
 
-            allCards.Shuffle();
+            foreach(var cardAsset in allCards) {
+                CardModel cardModel = new CardModel();
+                cardModel.InitializeData(cardAsset);  
+                cards.Add(cardModel);
+            }
+            cards.Shuffle();
             int gameSize = GameManager.Instance.Settings.GetGameSize();
     
-            List<CardModel> selectedCards = allCards.GetRange(0, Math.Min(Mathf.CeilToInt(gameSize/2), allCards.Count));
+            List<CardModel> selectedCards = cards.GetRange(0, Math.Min(Mathf.CeilToInt(gameSize/2), allCards.Count));
             List<CardModel> gameCards = selectedCards.SelectMany(item => new List<CardModel> { item, item }).ToList();
-
+           
+            gameCards.Shuffle();
             return gameCards;
         }
 
