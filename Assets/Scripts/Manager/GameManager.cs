@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using CM.Enums;
@@ -33,7 +34,7 @@ namespace CM.Managers
 
         private GameController<GameModel, GameView> gameController;
         private GameState gameState = GameState.None;
-        
+
         private void Awake()
         {
             if (Instance != null && Instance != this)
@@ -43,8 +44,7 @@ namespace CM.Managers
             }
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            Settings = GameDataManager.Instance.LoadGameSettings();
-
+            Settings = GameDataManager.Instance.LoadGameSettings();            
         }
 
         private void Start()
@@ -92,18 +92,19 @@ namespace CM.Managers
             }
         }    
 
-    private void EndGame()
-    {
-        ClearGame();
-        ChangeGameState(GameState.Reset);
-    }
+        private void EndGame()
+        {
+            ClearGame();
+            SoundManager.Instance.PlaySound(SoundManager.Instance.gameEndSound);
+            ChangeGameState(GameState.Reset);
+        }
 
-    private void ClearGame()
-    {
-        gameController.Destroy();
-        gameController = null;
-        ChangeGameState(GameState.Reset);
-    }
+        private void ClearGame()
+        {
+            gameController.Destroy();
+            gameController = null;
+            ChangeGameState(GameState.Reset);
+        }
 
         private void OnDestroy()
         {

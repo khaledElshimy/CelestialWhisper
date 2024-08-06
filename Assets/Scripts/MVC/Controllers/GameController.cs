@@ -84,6 +84,7 @@ namespace CM.MVC.Controllers
                         cardFlipped[0].ChangeCardState(CardState.Matched);
                         cardFlipped[1].ChangeCardState(CardState.Matched);
                         cardFlipped.Clear();
+                        SoundManager.Instance.PlaySound(SoundManager.Instance.matchSound);
                     }
                     else
                     {
@@ -92,6 +93,7 @@ namespace CM.MVC.Controllers
                         cardFlipped[0].ChangeCardState(CardState.Back);
                         cardFlipped[1].ChangeCardState(CardState.Back);
                         cardFlipped.Clear();
+                        SoundManager.Instance.PlaySound(SoundManager.Instance.mismatchSound);
                     }
                 }
             }

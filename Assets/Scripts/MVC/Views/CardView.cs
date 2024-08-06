@@ -56,7 +56,7 @@ namespace CM.MVC.Views
             Quaternion startRotation = cardImage.transform.rotation;
             Quaternion midRotation = startRotation * Quaternion.Euler(0, 90, 0); // Rotate to 90 degrees
             Quaternion endRotation = startRotation * Quaternion.Euler(0, 180, 0); // Rotate to 180 degrees
-
+            SoundManager.Instance.PlaySound(SoundManager.Instance.flipSound);
             while (elapsedTime < flipDuration / 2)
             {
                 cardImage.transform.rotation = Quaternion.Slerp(startRotation, midRotation, elapsedTime / (flipDuration / 2));
