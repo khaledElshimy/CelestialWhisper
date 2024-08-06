@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using CM.Controllers;
 using CM.Factories;
+using CM.Managers;
 using CM.MVC.Interfaces;
 using CM.MVC.Models;
 using UnityEngine;

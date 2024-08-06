@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using CM.Controllers;
 using CM.Enums;
 using CM.Factories;
+using CM.Managers;
 using CM.MVC.Interfaces;
 using CM.MVC.Models;
 using CM.MVC.Views;
@@ -49,8 +50,8 @@ namespace CM.MVC.Controllers
                 cardControllers.Add(cardController);
             }
 
-            Debug.Log($"Controllers  {cardControllers.Count} cards");
             GameManager.Instance.EventManager.OnCardClicked += OnCardClicked;
+            GameManager.Instance.EventManager.OnMatchUpdate += CheckGameEnded;
             gameView.PopulateCards(cardControllers);
         }
 
@@ -61,43 +62,32 @@ namespace CM.MVC.Controllers
         }
         public IEnumerator Match(CardController<CardModel, CardView> cardController)
         {
-            Debug.Log("1");
             if(cardFlipped.Count < 2)
             {
                 CardModel cardModel = cardController.Model as CardModel;
-                 Debug.Log($"1 {cardModel.cardState}  {((CardModel)cardController.Model).cardState}");
                 if (cardModel != null) 
                 {
-                                Debug.Log($"2 {cardModel.cardState}");
-
                     if (cardModel.cardState == CardState.Back)
                     {
-                                    Debug.Log("3");
-
                         cardController.ChangeCardState(CardState.Front);
-                                    Debug.Log("4");
-
                         cardFlipped.Add(cardController);
                     }
                 }
-                yield return new WaitForSeconds(3);
+
+                yield return new WaitForSeconds(2);
                 if (cardFlipped.Count == 2)
                 {
-                     Debug.Log("5");
-
                     if(cardFlipped[0].Model.Id == cardFlipped[1].Model.Id)
                     {
-                                    Debug.Log("6");
-
-                        GameManager.Instance.EventManager.MatchUpdate();
+                        int score = ++GameManager.Instance.ScoreModel.Match;
+                        GameManager.Instance.EventManager.MatchUpdate(score);
                         cardFlipped[0].ChangeCardState(CardState.Matched);
                         cardFlipped[1].ChangeCardState(CardState.Matched);
                         cardFlipped.Clear();
                     }
                     else
                     {
-                                    Debug.Log("7");
-
+                        GameManager.Instance.ScoreModel.Turns++;
                         GameManager.Instance.EventManager.TurnUpdate();
                         cardFlipped[0].ChangeCardState(CardState.Back);
                         cardFlipped[1].ChangeCardState(CardState.Back);
@@ -105,6 +95,26 @@ namespace CM.MVC.Controllers
                     }
                 }
             }
+        }
+
+        public void Destroy ()
+        {
+            cardControllers.Clear();
+            gameModel.cards.Clear();
+            foreach(Transform cardViewTransform in gameView.gameObject.transform) {
+                GameObject.Destroy(cardViewTransform.gameObject);
+            }
+            GameObject.Destroy(gameView.gameObject);
+            gameView = null;
+            gameModel = null;
+        }
+
+        private void CheckGameEnded(int match)
+        {
+           if (match == cardControllers.Count / 2)
+           {
+                GameManager.Instance.EventManager.GameEndded();
+           }
         }
     }
 }

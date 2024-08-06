@@ -10,17 +10,5 @@ namespace CM.MVC.Models
     {
         public int Match;
         public int Turns;
-
-        public void InitializeData()
-        {
-           var Score = GameDataManager.Instance.LoadScore() ;
-           Match = Score.match;
-           Turns = Score.turns;
-        }
-
-        public void SaveScore() 
-        {
-            GameDataManager.Instance.SaveGameScore(this);
-        }
     }
 }

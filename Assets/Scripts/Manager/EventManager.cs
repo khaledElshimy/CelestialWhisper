@@ -8,8 +8,10 @@ using UnityEngine;
 public class EventManager 
 {
     public event Action<GameState> OnGameStateChanged;
-    public event Action OnMatchUpdate;
+    public event Action<int> OnMatchUpdate;
     public event Action OnTurnpdate;
+    public event Action OnGameEndded;
+
     
     public event Action<IController<CardModel, CardView>> OnCardClicked;
 
@@ -26,13 +28,18 @@ public class EventManager
         OnCardClicked?.Invoke(cardController);
     }
 
-    public void MatchUpdate()
+    public void MatchUpdate(int matchScore)
     {
-        OnMatchUpdate?.Invoke();
+        OnMatchUpdate?.Invoke(matchScore);
     }
 
     public void TurnUpdate()
     {
         OnTurnpdate?.Invoke();
+    }
+
+    public void GameEndded()
+    {
+        OnGameEndded?.Invoke();
     }
 }

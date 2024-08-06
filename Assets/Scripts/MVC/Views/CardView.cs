@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 using System.Collections;
 using CM.Controllers;
 using CM.MVC.Models;
+using CM.Managers;
 
 namespace CM.MVC.Views
 {
@@ -14,6 +15,8 @@ namespace CM.MVC.Views
         public Image cardImage;
         public GameObject gameObject {get; private set;}
         private float flipDuration = 0.5f;
+
+        private Sprite currenSprite;
         
         public void InitializeView(string name, Transform parentTransform)
         {
@@ -32,7 +35,7 @@ namespace CM.MVC.Views
         {
             if (animate)
             {
-                cardImage.sprite =  sprite;
+                currenSprite =  sprite;
                 Flip();
 
             }
@@ -49,20 +52,31 @@ namespace CM.MVC.Views
         
         private IEnumerator FlipCardAnimation()
         {
-            RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
-
             float elapsedTime = 0f;
-            Quaternion startRotation = rectTransform.rotation;
-            Quaternion endRotation = startRotation * Quaternion.Euler(0, 180, 0);
+            Quaternion startRotation = cardImage.transform.rotation;
+            Quaternion midRotation = startRotation * Quaternion.Euler(0, 90, 0); // Rotate to 90 degrees
+            Quaternion endRotation = startRotation * Quaternion.Euler(0, 180, 0); // Rotate to 180 degrees
 
-            while (elapsedTime < flipDuration)
+            while (elapsedTime < flipDuration / 2)
             {
-                rectTransform.rotation = Quaternion.Slerp(startRotation, endRotation, elapsedTime / flipDuration);
+                cardImage.transform.rotation = Quaternion.Slerp(startRotation, midRotation, elapsedTime / (flipDuration / 2));
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }
 
-            rectTransform.rotation = endRotation;
+            cardImage.transform.rotation = midRotation;
+            cardImage.sprite = currenSprite; // Switch the sprite
+
+            elapsedTime = 0f;
+            while (elapsedTime < flipDuration / 2)
+            {
+                cardImage.transform.rotation = Quaternion.Slerp(midRotation, endRotation, elapsedTime / (flipDuration / 2));
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+                yield return null;
+
+            cardImage.transform.rotation = endRotation;
         }
     }
 }

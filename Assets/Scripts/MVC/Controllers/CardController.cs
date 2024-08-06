@@ -43,7 +43,6 @@ namespace CM.Controllers
             cardView.UpdateCardView(cardModel.backSprite, false);
         }
 
-
         public void ChangeCardState(CardState cardState)
         {
             Debug.Log("" + cardState.ToString());
@@ -71,6 +70,7 @@ namespace CM.Controllers
             } 
         }
 
+        
     }
 }
 

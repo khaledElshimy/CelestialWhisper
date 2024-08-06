@@ -1,43 +1,46 @@
 using System.Collections;
 using System.Collections.Generic;
 using CM.Enums;
+using CM.Managers;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MainMenuManager : MonoBehaviour
+namespace CM.UI
 {
-    public Button playButton;
-
-    private GameDifficulty  gameDifficulty = GameDifficulty.None;
-
-    [SerializeField]
-    private ToggleGroup difficultyToggleGroup;
-    
-    // Start is called before the first frame update
-    void Start()
+    public class MainMenuManager : MonoBehaviour
     {
-        playButton.onClick.AddListener(StartGame);
-        gameDifficulty = GameManager.Instance.Settings.GetGameDifficulty();
-        UpdateToggleGroup();
-    }
+        public Button playButton;
 
-    // Update is called once per frame
-    void StartGame()
-    {
-        GameManager.Instance.EventManager.ChangeGameState(GameState.GamePlay);
-    }
+        private GameDifficulty  gameDifficulty = GameDifficulty.None;
 
-    public void SelectGameDifficulty(int gameDifficulty)
-    {
-        GameDifficulty difficulty = (GameDifficulty)gameDifficulty;
-        if (this.gameDifficulty != difficulty) 
+        [SerializeField]
+        private ToggleGroup difficultyToggleGroup;
+        
+        // Start is called before the first frame update
+        void Start()
         {
-            this.gameDifficulty = difficulty;
-            GameManager.Instance.Settings.UpdateGameDifficulty(gameDifficulty);
+            playButton.onClick.AddListener(StartGame);
+            gameDifficulty = GameManager.Instance.Settings.GetGameDifficulty();
+            UpdateToggleGroup();
         }
-    }
 
-    // Method to update the toggle group based on the current difficulty level
+        // Update is called once per frame
+        void StartGame()
+        {
+            GameManager.Instance.EventManager.ChangeGameState(GameState.GamePlay);
+        }
+
+        public void SelectGameDifficulty(int gameDifficulty)
+        {
+            GameDifficulty difficulty = (GameDifficulty)gameDifficulty;
+            if (this.gameDifficulty != difficulty) 
+            {
+                this.gameDifficulty = difficulty;
+                GameManager.Instance.Settings.UpdateGameDifficulty(gameDifficulty);
+            }
+        }
+
+        // Method to update the toggle group based on the current difficulty level
         private void UpdateToggleGroup()
         {
             int difficulty = (int)gameDifficulty;
@@ -54,5 +57,5 @@ public class MainMenuManager : MonoBehaviour
                 toggles[index].isOn = true;
             }
         }
-
+    }
 }

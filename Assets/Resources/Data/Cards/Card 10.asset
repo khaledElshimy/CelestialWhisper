@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8776297828a346ac9a80fab3a018599, type: 3}
   m_Name: Card 10
   m_EditorClassIdentifier: 
-  Id: 10
+  id: 10
   Name: Pra
   frontSprite: {fileID: 21300000, guid: 88356b7eacd1940699896eb710886792, type: 3}
-  backSprite: {fileID: 21300000, guid: b7ba11948c4b242239d59ab8d59c9e9f, type: 3}
-  cardState: 0
+  backSprite: {fileID: 21300000, guid: 1c2eec4f264c34c92b06e3c5ad8dc5ed, type: 3}
+  cardState: 2
