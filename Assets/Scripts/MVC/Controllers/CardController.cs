@@ -26,7 +26,7 @@ namespace CM.Controllers
         {
             this.cardModel = cardModel;
             cardView.gameObject.name = cardModel.Name;
-            cardView.UpdateCardView(cardModel.frontSprite, false);
+            cardView.UpdateCardView(cardModel.backSprite, false);
         }
 
 
