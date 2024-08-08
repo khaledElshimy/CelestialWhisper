@@ -1,4 +1,6 @@
+using System;
 using CM.Enums;
+using CM.Managers;
 using CM.MVC.Interfaces;
 using CM.MVC.Models;
 using CM.MVC.Views;
@@ -12,7 +14,7 @@ namespace CM.Controllers
     /// </summary>
     /// <typeparam name="M">The type of the card model.</typeparam>
     /// <typeparam name="V">The type of the card view.</typeparam>
-    public class CardController<M, V> : IController<M, V> 
+    public class CardController<M, V> : IDisposable, IController<M, V> 
     where M : CardModel where V : CardView, new()
     {
         private CardModel cardModel;
@@ -43,6 +45,8 @@ namespace CM.Controllers
         {
             cardModel = new CardModel();
             cardView = new CardView();
+            GameManager.Instance.EventManager.OnCardMatchingStart += DisableClick;
+            GameManager.Instance.EventManager.OnCardMatchingEnd += EnableClick;
         }
 
         /// <summary>
@@ -51,6 +55,17 @@ namespace CM.Controllers
         private void DisableClick()
         {
             cardView.gameObject.GetComponent<Button>().enabled = false;
+        }
+
+        /// <summary>
+        /// Enables the card's click functionality by enabling its associated button.
+        /// </summary>
+        private void EnableClick()
+        {
+            if (cardModel.cardState != CardState.Matched)
+            {
+                cardView.gameObject.GetComponent<Button>().enabled = true;
+            }
         }
 
         /// <summary>
@@ -69,7 +84,6 @@ namespace CM.Controllers
         /// <param name="cardState">The new state of the card.</param>
         public void ChangeCardState(CardState cardState)
         {
-            Debug.Log("" + cardState.ToString());
             if (cardState != cardModel.cardState && cardModel.cardState != CardState.Matched)
             {
                 switch (cardState)
@@ -91,6 +105,15 @@ namespace CM.Controllers
                         break;
                 }
             } 
+        }
+
+        public void Dispose()
+        {
+            Model = null;
+            GameObject.Destroy(View.gameObject);
+            View = null;
+            GameManager.Instance.EventManager.OnCardMatchingStart -= DisableClick;
+            GameManager.Instance.EventManager.OnCardMatchingEnd -= EnableClick;
         }
     }
 }

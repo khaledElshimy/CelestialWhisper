@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using CM.Controllers;
@@ -16,7 +17,7 @@ namespace CM.MVC.Controllers
     /// </summary>
     /// <typeparam name="M">The type of the game model.</typeparam>
     /// <typeparam name="V">The type of the game view.</typeparam>
-    public class GameController<M, V> : IController<M, V> 
+    public class GameController<M, V> : IDisposable, IController<M, V> 
     where M : GameModel where V : GameView, new()
     {
         private GameModel gameModel;
@@ -53,7 +54,7 @@ namespace CM.MVC.Controllers
             gameModel.InitializeData();
             gameView = new GameView();
 
-            Transform parentTransform = Object.FindObjectOfType<Canvas>().transform;
+            Transform parentTransform = GameObject.FindObjectOfType<Canvas>().transform;
             gameView.InitializeView("GameView", parentTransform);
             gameView.CreateGridLayout();
            
@@ -66,7 +67,7 @@ namespace CM.MVC.Controllers
             }
 
             GameManager.Instance.EventManager.OnCardClicked += OnCardClicked;
-            GameManager.Instance.EventManager.OnMatchUpdate += CheckGameEnded;
+            GameManager.Instance.EventManager.OnCardMatchingEnd += CheckGameEnded;
             gameView.PopulateCards(cardControllers);
         }
 
@@ -77,6 +78,7 @@ namespace CM.MVC.Controllers
         public void OnCardClicked(IController<CardModel, CardView> controller)
         {
             CardController<CardModel, CardView> cardController = (CardController<CardModel, CardView>)controller;
+            GameManager.Instance.EventManager.CardMatchingStart();    
             GameManager.Instance.StartCoroutine(Match(cardController));
         }
 
@@ -99,7 +101,7 @@ namespace CM.MVC.Controllers
                     }
                 }
 
-                yield return new WaitForSeconds(2);
+                yield return new WaitForSeconds(1);
                 if (cardFlipped.Count == 2)
                 {
                     if (cardFlipped[0].Model.Id == cardFlipped[1].Model.Id)
@@ -121,32 +123,37 @@ namespace CM.MVC.Controllers
                         SoundManager.Instance.PlaySound(SoundManager.Instance.mismatchSound);
                     }
                 }
-            }
+            }    
+            GameManager.Instance.EventManager.CardMatchingEnd();
         }
 
         /// <summary>
         /// Cleans up the game controller by clearing card controllers and destroying game objects.
         /// </summary>
-        public void Destroy()
+        public void Dispose()
         {
-            cardControllers.Clear();
-            gameModel.cards.Clear();
-            foreach (Transform cardViewTransform in gameView.gameObject.transform) 
+            foreach (CardController<CardModel, CardView> controller in cardControllers) 
             {
-                GameObject.Destroy(cardViewTransform.gameObject);
+                controller.Dispose();
             }
+
+            gameModel.cards.Clear();
+            cardControllers.Clear();
             GameObject.Destroy(gameView.gameObject);
             gameView = null;
             gameModel = null;
+
+            GameManager.Instance.EventManager.OnCardClicked -= OnCardClicked;
+            GameManager.Instance.EventManager.OnCardMatchingEnd -= CheckGameEnded;
         }
 
         /// <summary>
         /// Checks if the game has ended based on the number of matches.
         /// </summary>
         /// <param name="match">The number of matches made so far.</param>
-        private void CheckGameEnded(int match)
+        private void CheckGameEnded()
         {
-            if (match == cardControllers.Count / 2)
+            if (GameManager.Instance.ScoreModel.Match == cardControllers.Count / 2)
             {
                 GameManager.Instance.EventManager.GameEnded();
             }

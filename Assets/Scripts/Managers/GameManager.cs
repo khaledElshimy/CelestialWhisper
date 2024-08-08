@@ -126,7 +126,7 @@ namespace CM.Managers
         /// </summary>
         private void ClearGame()
         {
-            gameController.Destroy();
+            gameController.Dispose();
             gameController = null;
             ChangeGameState(GameState.Reset);
         }

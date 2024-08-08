@@ -39,7 +39,6 @@ namespace CM.Managers
             string path = Path.Combine(Application.persistentDataPath, Configurations.SETTINGS_FILE_NAME);
 
             File.WriteAllText(path, json);
-            Debug.Log($"Game Settings saved at {path}");
         }
 
         /// <summary>
@@ -54,7 +53,6 @@ namespace CM.Managers
             {
                 string json = File.ReadAllText(path);
                 GameSettings settings = JsonUtility.FromJson<GameSettings>(json);
-                Debug.Log($"Settings loaded from {path}");
                 return settings;
             }
             else
